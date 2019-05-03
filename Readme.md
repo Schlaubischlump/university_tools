@@ -39,7 +39,7 @@ Grades from Jogustine
 
 optional arguments:
   -h, --help            show this help message and exit
-  -t TERM, --term TERM  Only show grades for a specific term (The default it
+  -t TERM, --term TERM  Only show grades for a specific term (The default is
                         'latest' for the current term).
   -l, --list            Show all terms.
   -s, --save-password   Save and store the current credentials in a keychain.

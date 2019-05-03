@@ -15,7 +15,7 @@ KEYCHAIN_STR = "jgu_wrapper"
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Grades from Jogustine")
     # optional arguments
-    parser.add_argument("-t", "--term", help="Only show grades for a specific term (The default it 'latest' for the current term).",
+    parser.add_argument("-t", "--term", help="Only show grades for a specific term (The default is 'latest' for the current term).",
                         type=str, default="latest")
     parser.add_argument("-l", "--list", help="Show all terms.", action="store_true")
     parser.add_argument("-s", "--save-password", help="Save and store the current credentials in a keychain.", action="store_true")
