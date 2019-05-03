@@ -52,3 +52,6 @@ required named arguments:
 ```
 pip3 install git+https://github.com/Schlaubischlump/university_tools
 ```
+
+# Credits:
+Special thanks goes to [gusser93](https://github.com/Gusser93?tab=repositories) !
