@@ -28,7 +28,16 @@ optional arguments:
 ## Fahrplan
 
 ```
-usage: fahrplan STATIONNAME
+usage: fahrplan [-h] [-s STATION]
+
+Fahrplanauskunft
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+required named arguments:
+  -s STATION, --station STATION
+                        Show all connections for this station
 ```
 
 ## Noten
