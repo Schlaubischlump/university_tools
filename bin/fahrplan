@@ -2,7 +2,7 @@
 
 import sys
 
-from universitytools.timetable import load_mensa_data, print_mensa_data
+from universitytools.timetable import print_connections
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
