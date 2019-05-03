@@ -1,8 +1,8 @@
-#Tools:
+# Tools:
 
 This repository contains personal scripts used to make my life at the University of Mainz (JGU) easier. These scripts require `python3.6` and up.
 
-##Mensa
+## Mensa
 ```
 usage: mensa [-h] [-k {vegan,veggi,vital,all}] [-d {past,today,upcoming,all}]
              [-c {Theke 1,Theke 2,Theke 3,Theke 4,Wok,Tagesessen,Snacken,all}]
@@ -25,13 +25,13 @@ optional arguments:
   -f FOOD, --food FOOD  Regex to only match certain foods.
 ```
 
-##Fahrplan
+## Fahrplan
 
 ```
 usage: fahrplan STATIONNAME
 ```
 
-#Installation:
+# Installation:
 ```
 pip3 install 
 ```
