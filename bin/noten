@@ -4,8 +4,8 @@ import sys
 import argparse
 from getpass import getpass
 
-from universitytools.jguwrapper import login, get_terms, get_exam_results, LoginFailedException, print_terms, \
-                                       print_exam_results
+from universitytools.grades import login, get_terms, get_exam_results, LoginFailedException, print_terms, \
+                                   print_exam_results
 
 import keyring
 
