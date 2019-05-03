@@ -28,7 +28,7 @@ if __name__ == "__main__":
         stations = get_stations()
         my_station = stations[args.station]
         connections = [c for c in get_current_connections(my_station) if c[-1] <= args.estimate]
-        print_connections(connections, title=f"Abfahrtzeiten {args.station}:")
+        print_connections(connections, title=f"Abfahrtzeiten {args.station}")
     except KeyError:
         print(f"Could not find station: {args.station}.", file=sys.stderr)
         exit()
