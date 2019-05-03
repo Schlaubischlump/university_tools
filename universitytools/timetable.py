@@ -2,6 +2,8 @@ import time
 from contextlib import closing
 from urllib.request import urlopen
 
+from universitytools import print_table
+
 # Take a look at:
 # https://github.com/derf/Travel-Status-DE-URA/blob/master/lib/Travel/Status/DE/URA.pm
 base_url = "http://ura.itcs.mvg-mainz.de/interfaces/ura/instant_V2"
@@ -83,25 +85,9 @@ def print_connections(station, header=["Nr.", "Linie", "Abfahrt in min"]):
     Print the current connections for this station in a tabular.
     :param station: name of the station
     """
-    from texttable import Texttable
-
     stations = get_stations()
     my_station = stations[station]
     connections = get_current_connections(my_station)
 
-    assert len(header) == len(connections[0])
+    print_table(connections, header, f"{station}:")
 
-    table = Texttable()
-    table.set_cols_align(["c"]*len(header))
-    table.set_cols_valign(["m"]*len(header))
-    table.add_rows([header] + connections)
-    table_str = table.draw()
-
-    table_width = len(table_str.split()[0])
-    title = f"{station}:".center(table_width)
-
-    print()
-    print(title)
-    print()
-    print(table_str)
-    print()

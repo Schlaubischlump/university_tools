@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+
+import sys
+import argparse
+from getpass import getpass
+
+from universitytools.jguwrapper import login, get_terms, get_exam_results, LoginFailedException, print_terms, \
+                                       print_exam_results
+
+import keyring
+
+KEYCHAIN_STR = "jgu_wrapper"
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Grades from Jogustine")
+    # optional arguments
+    parser.add_argument("-t", "--term", help="Only show grades for a specific term (The default it 'latest' for the current term).",
+                        type=str, default="latest")
+    parser.add_argument("-l", "--list", help="Show all terms.", action="store_true")
+    parser.add_argument("-s", "--save-password", help="Save and store the current credentials in a keychain.", action="store_true")
+    # required arguments
+    requiredNamed = parser.add_argument_group('required named arguments')
+    requiredNamed.add_argument("-u", "--user", help="Use a specific user for the login.", type=str, default=None)
+    # parse all arguments
+    args = parser.parse_args()
+
+    user = args.user
+    term = args.term
+    save_pwd = args.save_password
+    password = None
+
+    # try to read password from keychain
+    if not save_pwd:
+        password = keyring.get_password(KEYCHAIN_STR, user)
+
+    if not user:
+        print("[ERROR] - Must specify a user for which you want to save credentials.", file=sys.stderr)
+        exit()
+
+    if not password:
+        # let the user enter the password
+        password = getpass()
+
+        # save the user credentials to the keychain
+        if save_pwd:
+            keyring.set_password(KEYCHAIN_STR, user, password)
+
+    try:
+        session, session_no = login(user, password)
+    except LoginFailedException as exc:
+        print(exc, file=sys.stderr)
+        exit()
+
+    if args.list:
+        all_terms = get_terms(session, session_no)
+        print_terms(all_terms)
+    elif term:
+        all_terms = get_terms(session, session_no)
+
+        if term == "latest":
+            term = all_terms[0]
+        else:
+            # find the matching term
+            for t in all_terms:
+                if t.name == term:
+                    term = t
+                    break
+
+        results = get_exam_results(session, session_no, [term])
+        print_exam_results(results, title=f"Ergebnisse für {term.name}:")

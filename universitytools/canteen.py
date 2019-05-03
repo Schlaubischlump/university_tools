@@ -8,6 +8,8 @@ try:
 except ImportError:
     from urllib.request import urlopen
 
+from universitytools import print_table
+
 
 class EnumBase(Enum):
     def __str__(self):
@@ -142,28 +144,4 @@ def print_mensa_data(data, header=("Datum", "Ort", "Theke", "Essen", "Preis", "A
     :param data: mensa data
     :param header: first header row of the table 
     """
-    data = list(data)
-    if len(data) == 0:
-        return
-
-    cols = len(data[0])
-
-    assert len(header) == cols
-
-    # print the data
-    from texttable import Texttable
-
-    table = Texttable()
-    table.set_cols_align(["c"]*cols)
-    table.set_cols_valign(["m"]*cols)
-    table.add_rows([header] + list(data))
-    table_str = table.draw()
-
-    table_width = len(table_str.split()[0])
-    title = "Speiseplan:".center(table_width)
-
-    print()
-    print(title)
-    print()
-    print(table_str)
-    print()
+    print_table(data, header, "Speiseplan:")

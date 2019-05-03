@@ -31,6 +31,23 @@ optional arguments:
 usage: fahrplan STATIONNAME
 ```
 
+## Noten
+```
+usage: noten [-h] [-t TERM] [-l] [-s] [-u USER]
+
+Grades from Jogustine
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -t TERM, --term TERM  Only show grades for a specific term (The default it
+                        'latest' for the current term).
+  -l, --list            Show all terms.
+  -s, --save-password   Save and store the current credentials in a keychain.
+
+required named arguments:
+  -u USER, --user USER  Use a specific user for the login.
+```
+
 # Installation:
 ```
 pip3 install git+https://github.com/Schlaubischlump/university_tools

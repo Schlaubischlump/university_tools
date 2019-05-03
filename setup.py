@@ -10,9 +10,9 @@ setup(
     author='SchlaubiSchlump',
     packages=['universitytools'],
     license='GPLv3+',
-    scripts=['bin/fahrplan', 'bin/mensa'],
+    scripts=['bin/fahrplan', 'bin/mensa', 'bin/noten'],
     long_description=open('Readme.md').read(),
-    install_requires=['texttable'],
+    install_requires=['texttable', 'requests', 'beautifulsoup4', 'keyring'],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
