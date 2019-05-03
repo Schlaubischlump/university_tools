@@ -33,5 +33,5 @@ usage: fahrplan STATIONNAME
 
 # Installation:
 ```
-pip3 install 
+pip3 install https://github.com/Schlaubischlump/university_tools
 ```
