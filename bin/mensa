@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+
+import re
+import sys
+import argparse
+from datetime import datetime
+
+from universitytools.canteen import load_mensa_data, print_mensa_data, Theke, Mensa
+
+
+def str_to_ymd(s):
+    """
+    Convert '03.05.2019' -> 20190503
+    """
+    return int("".join(reversed(s.split("."))))
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Mensa Speiseplan")
+    parser.add_argument("-k", "--kind", help="Only list food of a special kind.",
+                        type=str, choices=["vegan", "veggi", "vital", "all"], default="all")
+    parser.add_argument("-d", "--date", help="List only foods for today or upcoming days.",
+                        type=str, choices=["past", "today", "upcoming", "all"], default="today")
+    parser.add_argument("-c", "--counter", help="Only list a specific counter.",
+                        type=str, choices=list(map(str, Theke))+["all"], default="all")
+    parser.add_argument("-l", "--location", help="List only food for a special location.",
+                        type=str, choices=list(map(str, Mensa))+["all"], default="all")
+    parser.add_argument("-p", "--price", help="Set a upper price limit as float.",
+                        type=float, default=None)
+    parser.add_argument("-f", "--food", help="Regex to only match certain foods.",
+                        type=str, default=None)
+    args = parser.parse_args()
+
+    # build the filter expression
+    filter_expressions = []
+
+    if args.kind != "all":
+        kind = lambda row: args.kind in row.kind.lower()
+        filter_expressions.append(kind)
+
+    if args.date == "today":
+        today = lambda row: datetime.now().strftime("%d.%m.%Y") == row.date
+        filter_expressions.append(today)
+    elif args.date == "upcoming":
+        after_today = lambda row: str_to_ymd(datetime.now().strftime("%d.%m.%Y")) <= str_to_ymd(row.date)
+        filter_expressions.append(after_today)
+    elif args.date == "past":
+        before_today = lambda row: str_to_ymd(datetime.now().strftime("%d.%m.%Y")) >= str_to_ymd(row.date)
+        filter_expressions.append(before_today)
+
+    if args.counter != "all":
+        counter_exp = lambda row: args.counter == str(row.counter)
+        filter_expressions.append(counter_exp)
+
+    if args.location != "all":
+        location_exp = lambda row: args.location == str(row.location)
+        filter_expressions.append(location_exp)
+
+    if args.price:
+        price_exp = lambda row: float(row.price[:-1]) <= args.price
+        filter_expressions.append(price_exp)
+
+    if args.food:
+        food_exp = lambda row: re.search(args.food, row.food) is not None
+        filter_expressions.append(food_exp)
+
+    # create a single lambda to match all filter expressions
+    match_all_filter = lambda row: all(f(row) for f in filter_expressions)
+
+    # load filtered data
+    data = load_mensa_data(filter_expr=match_all_filter)
+    print_mensa_data(data)

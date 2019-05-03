@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+
+import sys
+
+from universitytools.timetable import load_mensa_data, print_mensa_data
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Only one argument, a station name is required!", file=sys.stderr)
+    else:
+        print_connections(sys.argv[1])
