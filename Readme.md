@@ -28,16 +28,18 @@ optional arguments:
 ## Fahrplan
 
 ```
-usage: fahrplan [-h] [-s STATION]
+usage: fahrplan [-h] [-e ESTIMATE] [-s STATION]
 
 Fahrplanauskunft
 
 optional arguments:
   -h, --help            show this help message and exit
+  -e ESTIMATE, --estimate ESTIMATE
+                        only show connections in the next ESTIMATE minutes
 
 required named arguments:
   -s STATION, --station STATION
-                        Show all connections for this station
+                        show all connections for this station
 ```
 
 ## Noten
