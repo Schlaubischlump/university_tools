@@ -60,9 +60,8 @@ def get_stations():
 def get_current_connections(station_id):
     """
     :param station_id: station for which all connections should be listed
-    :return: [(line number, destination, departure time in minutes), ...]
+    :return: generator (line number, destination, departure time in minutes)
     """
-    connections = []
     url = base_url + f"?ReturnList=lineid%2Cdestinationname%2Cestimatedtime%2Cexpiretime&stopid={station_id}"
     with closing(urlopen(url)) as file:
         # skip first API version line
@@ -73,21 +72,16 @@ def get_current_connections(station_id):
                 _, num, dest, estimate, _ = _split_line(line)
                 current_milli_time = int(round(time.time()*1000))
                 estimate = round((int(estimate) - current_milli_time) / 60000.0)
-                connections.append((int(num), dest, int(estimate)))
+                yield (int(num), dest, int(estimate))
             except Exception as e:
                 # ignore invalid lines
                 continue
-    return connections
 
 
-def print_connections(station, header=["Nr.", "Linie", "Abfahrt in min"]):
+def print_connections(data, header=["Nr.", "Linie", "Abfahrt in min"], title="Abfahrtzeiten:"):
     """
     Print the current connections for this station in a tabular.
-    :param station: name of the station
+    :param data: connection data
     """
-    stations = get_stations()
-    my_station = stations[station]
-    connections = get_current_connections(my_station)
-
-    print_table(connections, header, f"{station}:")
+    print_table(data, header, title)
 

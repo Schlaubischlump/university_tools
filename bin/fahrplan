@@ -5,7 +5,7 @@ import sys
 import argparse
 import argcomplete
 
-from universitytools.timetable import get_stations, print_connections
+from universitytools.timetable import get_stations, get_current_connections, print_connections
 
 
 def station_completer(prefix, parsed_args, **kwargs):
@@ -14,8 +14,9 @@ def station_completer(prefix, parsed_args, **kwargs):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Fahrplanauskunft")
+    parser.add_argument("-e", "--estimate", help="only show connections in the next ESTIMATE minutes", type=int, default=120)
     requiredNamed = parser.add_argument_group('required named arguments')
-    requiredNamed.add_argument("-s", "--station", help="Show all connections for this station", type=str, default=None).completer = station_completer
+    requiredNamed.add_argument("-s", "--station", help="show all connections for this station", type=str, default=None).completer = station_completer
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
@@ -24,7 +25,10 @@ if __name__ == "__main__":
         exit()
 
     try:
-        print_connections(args.station)
+        stations = get_stations()
+        my_station = stations[args.station]
+        connections = [c for c in get_current_connections(my_station) if c[-1] <= args.estimate]
+        print_connections(connections, title=f"Abfahrtzeiten {args.station}:")
     except KeyError:
         print(f"Could not find station: {args.station}.", file=sys.stderr)
         exit()
